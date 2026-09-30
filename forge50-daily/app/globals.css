@@ -175,6 +175,7 @@ a {
   background: transparent;
   color: var(--muted);
   padding: 0 10px;
+  white-space: nowrap;
 }
 
 .button:disabled {
@@ -210,16 +211,51 @@ a {
   line-height: 1.25;
 }
 
+.phase {
+  margin: -6px 0 10px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.rx-format {
+  margin: 0 0 4px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.rx-text {
+  color: var(--text);
+}
+
+.rx-load {
+  color: var(--muted);
+}
+
+/* Session-type accents, matching the original Forge 50 app. */
+.pill.t-strength {
+  background: rgba(138, 127, 232, 0.15);
+  color: #7b6fe0;
+}
+
+.pill.t-cardio {
+  background: var(--ok-soft);
+  color: var(--ok);
+}
+
+.pill.t-mobility {
+  background: rgba(90, 169, 230, 0.15);
+  color: #3d8fd0;
+}
+
+.pill.t-rest {
+  background: var(--line);
+  color: var(--muted);
+}
+
 .rx {
   display: flex;
   flex-direction: column;
   gap: 12px;
-}
-
-.rx-block h3 {
-  margin: 0 0 4px;
-  font-size: 0.85rem;
-  color: var(--accent);
 }
 
 .rx ul {
@@ -261,28 +297,6 @@ a {
   font-size: 0.88rem;
 }
 
-.rx-kv {
-  margin: 0;
-  display: grid;
-  gap: 4px;
-}
-
-.rx-kv > div {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.rx-kv dt {
-  color: var(--muted);
-}
-
-.rx-kv dd {
-  margin: 0;
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
 /* Calendar and tasks */
 .list {
   list-style: none;
@@ -304,11 +318,18 @@ a {
 }
 
 .event-time {
-  flex: 0 0 auto;
-  min-width: 7.5em;
-  color: var(--muted);
+  flex: 0 0 5.5em;
+  display: flex;
+  flex-direction: column;
   font-size: 0.9rem;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
+}
+
+.event-end {
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 0.82rem;
 }
 
 .event-title {

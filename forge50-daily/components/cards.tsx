@@ -3,7 +3,7 @@ import { getEventsForDay } from "@/lib/google-calendar";
 import { getOpenTasks } from "@/lib/todoist";
 import { formatTime } from "@/lib/dates";
 import type { ProgramPosition } from "@/lib/program";
-import { Prescription } from "@/components/prescription";
+import { Prescription, type ProgramPrescription } from "@/components/prescription";
 import { DismissButton } from "@/components/dismiss-button";
 
 const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -52,7 +52,7 @@ export async function WorkoutCard({
     <section className="card workout">
       <div className="card-head">
         <h2 className="card-title">
-          Week {position.week} · {DAY_NAMES[position.day_of_week]}
+          Week {position.week} of 52 · {DAY_NAMES[position.day_of_week]}
         </h2>
         {logged && (
           <span className="pill done">
@@ -65,16 +65,41 @@ export async function WorkoutCard({
       ) : !day ? (
         <p className="muted">Nothing is prescribed for today.</p>
       ) : (
-        <>
-          <p className="workout-title">
-            {day.title}
-            {day.session_type && <span className="pill">{day.session_type}</span>}
-          </p>
-          <Prescription value={day.prescription} />
-          {day.notes && <p className="notes">{day.notes}</p>}
-        </>
+        <WorkoutBody day={day} />
       )}
     </section>
+  );
+}
+
+const TYPE_CLASS: Record<string, string> = {
+  Strength: "t-strength",
+  Cardio: "t-cardio",
+  MetCon: "t-metcon",
+  Mobility: "t-mobility",
+  Rest: "t-rest",
+};
+
+function WorkoutBody({
+  day,
+}: {
+  day: { title: string; session_type: string; prescription: ProgramPrescription; notes: string | null };
+}) {
+  const rx = day.prescription;
+  return (
+    <>
+      <p className="workout-title">
+        {day.title}
+        <span className={`pill ${TYPE_CLASS[day.session_type] ?? ""}`}>{day.session_type}</span>
+      </p>
+      {rx?.phase && (
+        <p className="phase">
+          Phase {rx.phase}
+          {rx.phase_name ? ` · ${rx.phase_name}` : ""}
+        </p>
+      )}
+      <Prescription value={rx} />
+      {day.notes && <p className="notes">{day.notes}</p>}
+    </>
   );
 }
 
@@ -114,7 +139,14 @@ export async function CalendarCard({ today, timeZone }: { today: string; timeZon
           {result.events.map((e) => (
             <li key={e.id} className="event">
               <span className="event-time">
-                {e.allDay ? "All day" : `${formatTime(e.start, timeZone)}–${formatTime(e.end, timeZone)}`}
+                {e.allDay ? (
+                  "All day"
+                ) : (
+                  <>
+                    {formatTime(e.start, timeZone)}
+                    <span className="event-end">{formatTime(e.end, timeZone)}</span>
+                  </>
+                )}
               </span>
               <span className="event-title">
                 {e.title}

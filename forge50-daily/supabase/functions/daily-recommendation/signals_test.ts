@@ -100,3 +100,11 @@ Deno.test("program position", () => {
   assertEquals(programPosition(addDays("2026-10-05", 52 * 7), "2026-10-05"), null);
   assertEquals(programPosition(addDays("2026-10-05", 52 * 7 - 1), "2026-10-05")?.week, 52);
 });
+
+Deno.test("program weeks are Monday-aligned like the HTML app", () => {
+  // Start on a Wednesday: week 1 is still the Mon-Sun week containing it.
+  assertEquals(programPosition("2026-10-05", "2026-10-07"), { week: 1, day_of_week: 1 });
+  assertEquals(programPosition("2026-10-11", "2026-10-07"), { week: 1, day_of_week: 0 });
+  assertEquals(programPosition("2026-10-12", "2026-10-07"), { week: 2, day_of_week: 1 });
+  assertEquals(programPosition("2026-10-04", "2026-10-07"), null);
+});
