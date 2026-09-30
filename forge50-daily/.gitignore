@@ -42,3 +42,6 @@ next-env.d.ts
 
 # example env is committed
 !.env.example
+
+# created by running the edge-function tests with deno
+deno.lock
